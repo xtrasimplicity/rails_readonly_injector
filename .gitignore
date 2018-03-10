@@ -6,4 +6,5 @@
 /pkg/
 /spec/reports/
 /tmp/
-gemfiles/*.lock
+gemfiles/*.gemfile.lock
+.byebug_history
