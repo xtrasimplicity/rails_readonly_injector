@@ -5,7 +5,8 @@ end
 
 appraise 'rails_4_0' do
   gem 'rails', '~> 4.0.0'
-  gem 'cucumber-rails', '~> 1.4.5', require: false, group: :test
+  gem 'cucumber-rails', '~> 1.5.0', group: :test, require: false
+  gem 'rspec-rails', '~> 3.7.2', group: :test
   gem 'database_cleaner', '~> 1.0.1'
   gem 'sqlite3', '~> 1.3.13'
 end
