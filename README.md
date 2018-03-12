@@ -1,5 +1,5 @@
 # Readonly Site Toggle
-[![Build Status](https://travis-ci.org/xtrasimplicity/readonly_site_toggle.svg?branch=master)](https://travis-ci.org/xtrasimplicity/readonly_site_toggle)
+[![Build Status](https://travis-ci.org/xtrasimplicity/readonly_site_toggle.svg?branch=master)](https://travis-ci.org/xtrasimplicity/readonly_site_toggle)[![Maintainability](https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/maintainability)](https://codeclimate.com/github/xtrasimplicity/readonly_site_toggle/maintainability)<a href="https://codeclimate.com/github/xtrasimplicity/readonly_site_toggle/test_coverage"><img src="https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/test_coverage" /></a>
 
 Easily switch a Rails site into 'read-only' mode, and back again, without restarting the server.
 
