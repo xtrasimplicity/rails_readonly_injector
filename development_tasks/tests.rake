@@ -43,7 +43,10 @@ namespace :dev do
     append_to_file 'spec/spec_helper.rb', "Dir.glob('support/**/*.rb').each { |rb| require rb }"
 
     # Set up SimpleCov
-    append_to_beginning_of_file 'spec/spec_helper.rb', "require 'simplecov'"
+    append_to_beginning_of_file 'spec/spec_helper.rb', %{
+      require 'simplecov'
+      require 'readonly_site_toggle'
+    }
     append_to_beginning_of_file 'features/support/env.rb', "require 'simplecov'"
     
     write_file_with_content '.simplecov', %{

@@ -16,6 +16,10 @@ module ReadonlySiteToggle
     self.configuration
   end
 
+  def self.reset_configuration!
+    @config = Configuration.new
+  end
+
   private
 
   def self.configuration
