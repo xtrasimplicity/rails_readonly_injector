@@ -1,6 +1,9 @@
 appraise 'rails_3' do
   gem 'rails', '~> 3'
   gem 'cucumber-rails', '~> 1.4.5'
+  gem 'rspec-rails', '~> 3.7.2', group: :test
+  gem 'database_cleaner', '~> 1.0.1'
+  gem 'sass', '= 3.4.21'
 end
 
 appraise 'rails_4_0' do
