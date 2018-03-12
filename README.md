@@ -1,8 +1,7 @@
 # Readonly Site Toggle
 [![Build Status](https://travis-ci.org/xtrasimplicity/readonly_site_toggle.svg?branch=master)](https://travis-ci.org/xtrasimplicity/readonly_site_toggle)
 
-Easily switch a Rails site into 'read-only' mode, and back again, without restarting the server. Edit
-Add topics
+Easily switch a Rails site into 'read-only' mode, and back again, without restarting the server.
 
 ## Installation
 
