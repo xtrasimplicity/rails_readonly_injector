@@ -7,8 +7,6 @@ rvm:
  - 2.2.7
  - 2.3.6
  - 2.4.1
- - jruby
- - rbx-3
  - ruby-head
 
 branches:
