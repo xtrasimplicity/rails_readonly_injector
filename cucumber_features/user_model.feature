@@ -1,6 +1,13 @@
-Feature: Models
+Feature: User model - When not in read-only mode
   Background:
-    Given The site is not in read-only mode
+    Given I execute:
+    """
+    ReadonlySiteToggle.config do |config|
+      config.read_only = false
+    end
+
+    ReadonlySiteToggle.reload!
+    """
 
   Scenario:  A user has previously been persisted to the database, and an attempt to update it has been made
     Given There is a user that has been persisted to the database

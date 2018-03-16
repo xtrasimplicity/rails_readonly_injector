@@ -5,6 +5,16 @@ module ReadonlySiteToggle
     def read_only
       @read_only || false
     end
+
+    def controller_rescue_action=(action)
+      raise 'A lambda or proc must be specified' unless action.respond_to? :call
+
+      @controller_rescue_action = action
+    end
+
+    def controller_rescue_action
+      @controller_rescue_action || Proc.new {}
+    end
   end
   private_constant :Configuration
 

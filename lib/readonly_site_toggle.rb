@@ -17,11 +17,13 @@ module ReadonlySiteToggle
         restore_readonly_method(descendant_class)
       end
     end
+
+    inject_error_handler_into_actioncontroller_base
   end
 
   private
 
-  ALIASED_METHOD_NAME = 'old_readonly?'
+  ALIASED_METHOD_NAME = :old_readonly?
 
   def self.override_readonly_method(klass)
     klass.class_eval do
@@ -35,7 +37,21 @@ module ReadonlySiteToggle
 
   def self.restore_readonly_method(klass)
     klass.class_eval do
-      alias_method :readonly?, ALIASED_METHOD_NAME if methods.include? ALIASED_METHOD_NAME
+      def readonly?
+        super
+      end
+    end
+  end
+
+  def self.inject_error_handler_into_actioncontroller_base
+    ActionController::Base.class_eval do |klass|
+      rescue_from ActiveRecord::ReadOnlyRecord, with: :rescue_from_readonly_failure
+
+      protected
+
+      def rescue_from_readonly_failure
+        instance_eval &ReadonlySiteToggle.config.controller_rescue_action
+      end
     end
   end
 end

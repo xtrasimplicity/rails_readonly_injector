@@ -1,9 +1,7 @@
-Given(/The site is( not)? in read-only mode/) do |should_be_readonly|
-  should_be_readonly = !!((should_be_readonly =~ /\s*not/i).nil?)
+Given("I execute:") do |code|
+  eval code
+end
 
-  ReadonlySiteToggle.config do |config|
-    config.read_only = should_be_readonly
-  end
-
-  ReadonlySiteToggle.reload!
+Then("The page should contain {string}") do |string|
+  expect(page).to have_content(string)
 end
