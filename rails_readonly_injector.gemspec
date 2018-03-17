@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["andrew.walter@burnet.edu.au"]
 
   spec.summary       = "Globally toggle 'read-only' mode in a Rails application, on-demand, without having to restart the server."
-  spec.homepage      = "https://www.github.com"
+  spec.homepage      = "https://www.github.com/xtrasimplicity/rails_readonly_injector"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
