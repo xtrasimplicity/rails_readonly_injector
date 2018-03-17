@@ -3,12 +3,9 @@ require "rails_readonly_injector/configuration"
 
 module RailsReadonlyInjector
   def self.reload!
-    descendants = ActiveRecord::Base.descendants
 
-    if descendants.empty?
-      Rails.application.eager_load!
-      descendants = ActiveRecord::Base.descendants
-    end
+    Rails.application.eager_load!
+    descendants = ActiveRecord::Base.descendants
 
     descendants.each do |descendant_class|
       if self.config.read_only
