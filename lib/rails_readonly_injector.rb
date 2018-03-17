@@ -8,6 +8,13 @@ module RailsReadonlyInjector
     descendants = ActiveRecord::Base.descendants
 
     descendants.each do |descendant_class|
+    
+      # Ensure excluded classes aren't set to read-only
+      if config.classes_to_exclude.include? descendant_class
+        restore_readonly_method(descendant_class)
+        next
+      end
+
       if self.config.read_only
         override_readonly_method(descendant_class)
       else

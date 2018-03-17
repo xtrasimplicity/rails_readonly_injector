@@ -1,6 +1,6 @@
 module RailsReadonlyInjector
   class Configuration
-    attr_writer :read_only
+    attr_writer :read_only, :classes_to_exclude
 
     def read_only
       @read_only || false
@@ -14,6 +14,10 @@ module RailsReadonlyInjector
 
     def controller_rescue_action
       @controller_rescue_action || Proc.new {}
+    end
+
+    def classes_to_exclude
+      @classes_to_exclude || []
     end
   end
   private_constant :Configuration

@@ -24,3 +24,17 @@ Feature: User model - When in read-only mode
     """
     When I save the user
     Then the user should not be saved
+  
+  Scenario: An attempt to create an instance of a model exempt from read-only mode has been made
+    Given There is a user that has not been persisted to the database
+    Given I execute:
+    """
+    RailsReadonlyInjector.config do |config|
+      config.read_only = true
+      config.classes_to_exclude = [User]
+    end
+
+    RailsReadonlyInjector.reload!
+    """
+    When I save the user
+    Then the user should be saved

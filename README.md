@@ -45,6 +45,10 @@ When you want to switch a site into read-only mode, you can then simply set `Rai
 
 If you want to reset the configuration to the defaults, you can simply call `RailsReadonlyInjector.reset_configuration!` from anywhere in your application.
 
+## Configuration Options
+- `read_only` => Whether the site should be in read-only mode. (Default: false)
+- `exclude_classes` => An array of classes that should be exempt from read-only mode.
+
 ## Development
 
 After checking out the repo, run `bundle install` to install the dependencies.
