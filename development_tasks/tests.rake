@@ -71,8 +71,8 @@ namespace :dev do
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'cucumber_features', '.'), 'features'
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'rspec_specs', '.'), 'spec'
 
-    system('bundle exec cucumber')
-    system('bundle exec rspec')
+    exit_code = system('bundle exec cucumber && bundle exec rspec')
+    exit exit_code
   end
 
   def parse_gemfile(file_path)
