@@ -21,7 +21,25 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To switch a complete site into read-only mode, simply set `RailsReadonlyInjector.config.read_only` to `true`, assign a Proc/lambda expression to `RailsReadonlyInjector.config.controller_rescue_action` and call `RailsReadonlyInjector.reload!`. 
+
+To make things a little neater, you can pass a block to the `config` method, like this:
+
+```
+RailsReadonlyInjector.config do |config|
+  config.read_only = false # Whether to set the site to read-only
+  config.controller_rescue_action = lambda do |context|
+    # This will be executed once an (unrescued) ActiveRecord::ReadOnlyRecord error is raised,
+    # anywhere within a controller's action.
+    # You can perform any redirection, logging etc from here. 
+
+    # This lambda expression is evaluated from within the context of the controller that raised the error.
+  end
+end
+
+RailsReadonlyInjector.reload!
+```
+
 
 ## Development
 
