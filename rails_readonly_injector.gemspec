@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "readonly_site_toggle/version"
+require "rails_readonly_injector/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "readonly_site_toggle"
-  spec.version       = ReadonlySiteToggle::VERSION
+  spec.name          = "rails_readonly_injector"
+  spec.version       = RailsReadonlyInjector::VERSION
   spec.authors       = ["Andrew Walter"]
   spec.email         = ["andrew.walter@burnet.edu.au"]
 

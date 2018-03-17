@@ -1,5 +1,5 @@
-# Readonly Site Toggle
-[![Build Status](https://travis-ci.org/xtrasimplicity/readonly_site_toggle.svg?branch=master)](https://travis-ci.org/xtrasimplicity/readonly_site_toggle)[![Maintainability](https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/maintainability)](https://codeclimate.com/github/xtrasimplicity/readonly_site_toggle/maintainability)<a href="https://codeclimate.com/github/xtrasimplicity/readonly_site_toggle/test_coverage"><img src="https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/test_coverage" /></a>
+# Rails ReadOnly Injector
+[![Build Status](https://travis-ci.org/xtrasimplicity/rails_readonly_injector.svg?branch=master)](https://travis-ci.org/xtrasimplicity/rails_readonly_injector)[![Maintainability](https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/maintainability)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/maintainability)<a href="https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/test_coverage"><img src="https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/test_coverage" /></a>
 
 Easily switch a Rails site into 'read-only' mode, and back again, without restarting the server.
 
@@ -8,7 +8,7 @@ Easily switch a Rails site into 'read-only' mode, and back again, without restar
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'readonly_site_toggle'
+gem 'rails_readonly_injector'
 ```
 
 And then execute:
@@ -17,7 +17,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install readonly_site_toggle
+    $ gem install rails_readonly_injector
 
 ## Usage
 
@@ -33,7 +33,7 @@ To run tests for a specific version of Rails, simply run `bundle exec appraisal 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/xtrasimplicity/readonly_site_toggle. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/xtrasimplicity/rails_readonly_injector. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -41,4 +41,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the ReadonlySiteToggle project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/xtrasimplicity/readonly_site_toggle/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the RailsReadonlyInjector project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/xtrasimplicity/rails_readonly_injector/blob/master/CODE_OF_CONDUCT.md).

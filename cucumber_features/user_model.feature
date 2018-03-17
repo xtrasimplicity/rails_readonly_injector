@@ -2,11 +2,11 @@ Feature: User model - When not in read-only mode
   Background:
     Given I execute:
     """
-    ReadonlySiteToggle.config do |config|
+    RailsReadonlyInjector.config do |config|
       config.read_only = false
     end
 
-    ReadonlySiteToggle.reload!
+    RailsReadonlyInjector.reload!
     """
 
   Scenario:  A user has previously been persisted to the database, and an attempt to update it has been made

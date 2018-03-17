@@ -28,7 +28,7 @@ namespace :dev do
     # Add required gems to the gemfile
     append_to_file 'Gemfile', gems_to_override.join("\n")
     append_to_file 'Gemfile', %{gem 'simplecov', require: false, group: :test\n}
-    append_to_file 'Gemfile', %{gem "readonly_site_toggle", path: "#{GEM_ROOT_PATH}"\n}
+    append_to_file 'Gemfile', %{gem "rails_readonly_injector", path: "#{GEM_ROOT_PATH}"\n}
 
     # Make sure we don't use the gemfile from Appraisal
     ENV.delete('BUNDLE_GEMFILE')
@@ -47,7 +47,7 @@ namespace :dev do
     # Set up SimpleCov
     append_to_beginning_of_file 'spec/spec_helper.rb', %{
       require 'simplecov'
-      require 'readonly_site_toggle'
+      require 'rails_readonly_injector'
     }
     append_to_beginning_of_file 'features/support/env.rb', "require 'simplecov'"
     

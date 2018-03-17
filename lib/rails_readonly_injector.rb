@@ -1,7 +1,7 @@
-require "readonly_site_toggle/version"
-require "readonly_site_toggle/configuration"
+require "rails_readonly_injector/version"
+require "rails_readonly_injector/configuration"
 
-module ReadonlySiteToggle
+module RailsReadonlyInjector
   def self.reload!
     descendants = ActiveRecord::Base.descendants
 
@@ -50,7 +50,7 @@ module ReadonlySiteToggle
       protected
 
       def rescue_from_readonly_failure
-        instance_eval &ReadonlySiteToggle.config.controller_rescue_action
+        instance_eval &RailsReadonlyInjector.config.controller_rescue_action
       end
     end
   end

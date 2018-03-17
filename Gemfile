@@ -2,5 +2,5 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-# Specify your gem's dependencies in readonly_site_toggle.gemspec
+# Specify your gem's dependencies in rails_readonly_injector.gemspec
 gemspec

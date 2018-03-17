@@ -1,4 +1,4 @@
-module ReadonlySiteToggle
+module RailsReadonlyInjector
   class Configuration
     attr_writer :read_only
 

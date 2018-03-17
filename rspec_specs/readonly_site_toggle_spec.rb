@@ -1,19 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe ReadonlySiteToggle do
+RSpec.describe RailsReadonlyInjector do
   describe '.reset_configuration!' do
     before do
-      ReadonlySiteToggle.config do |config|
+      RailsReadonlyInjector.config do |config|
         config.read_only = true
       end
 
-      ReadonlySiteToggle.reset_configuration!
+      RailsReadonlyInjector.reset_configuration!
     end
 
-    subject { ReadonlySiteToggle.config }
+    subject { RailsReadonlyInjector.config }
 
     it 'sets `read_only` to false' do
-      expect(ReadonlySiteToggle.config.read_only).to eq(false)
+      expect(RailsReadonlyInjector.config.read_only).to eq(false)
     end
   end
 
@@ -21,13 +21,13 @@ RSpec.describe ReadonlySiteToggle do
     let(:klass) { User }
 
     before do
-      ReadonlySiteToggle.config do |config|
+      RailsReadonlyInjector.config do |config|
         config.read_only = true
       end
 
-      ReadonlySiteToggle.reload!
+      RailsReadonlyInjector.reload!
 
-      ReadonlySiteToggle.send(:override_readonly_method, klass)
+      RailsReadonlyInjector.send(:override_readonly_method, klass)
     end
 
     describe 'An ActiveRecord object\'s #readonly? method' do
@@ -41,13 +41,13 @@ RSpec.describe ReadonlySiteToggle do
     let(:klass) { User }
 
     before do
-      ReadonlySiteToggle.config do |config|
+      RailsReadonlyInjector.config do |config|
         config.read_only = false
       end
 
-      ReadonlySiteToggle.reload!
+      RailsReadonlyInjector.reload!
 
-      ReadonlySiteToggle.send(:restore_readonly_method, klass)
+      RailsReadonlyInjector.send(:restore_readonly_method, klass)
     end
 
     describe('An ActiveRecord object\'s #readonly? method') do

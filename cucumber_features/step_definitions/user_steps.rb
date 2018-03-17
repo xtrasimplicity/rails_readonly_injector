@@ -1,6 +1,6 @@
 Given("There is a user that has been persisted to the database") do  
-  ReadonlySiteToggle.config.read_only = false
-  ReadonlySiteToggle.reload!
+  RailsReadonlyInjector.config.read_only = false
+  RailsReadonlyInjector.reload!
 
   @user = User.create(name: 'Bob')
 

@@ -3,11 +3,11 @@ Feature: User model - When in read-only mode
     Given There is a user that has been persisted to the database
     And I execute:
     """
-    ReadonlySiteToggle.config do |config|
+    RailsReadonlyInjector.config do |config|
       config.read_only = true
     end
 
-    ReadonlySiteToggle.reload!
+    RailsReadonlyInjector.reload!
     """
     When I update the user
     Then the user should not be updated
@@ -16,11 +16,11 @@ Feature: User model - When in read-only mode
     Given There is a user that has not been persisted to the database
     And I execute:
     """
-    ReadonlySiteToggle.config do |config|
+    RailsReadonlyInjector.config do |config|
       config.read_only = true
     end
 
-    ReadonlySiteToggle.reload!
+    RailsReadonlyInjector.reload!
     """
     When I save the user
     Then the user should not be saved

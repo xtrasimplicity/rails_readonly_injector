@@ -3,14 +3,14 @@ Feature: User Controller - When in read only mode
     Given There is a user that has been persisted to the database
     And I execute:
     """
-    ReadonlySiteToggle.config do |config|
+    RailsReadonlyInjector.config do |config|
       config.read_only = true
       config.controller_rescue_action = lambda do |context|
         render :text => 'The site is currently in read-only mode'
       end
     end
 
-    ReadonlySiteToggle.reload!
+    RailsReadonlyInjector.reload!
     """
     When I'm using a web browser and attempt to update the user
     Then The page should contain 'The site is currently in read-only mode'
@@ -20,14 +20,14 @@ Feature: User Controller - When in read only mode
   Scenario:  A new user is created (and was not previously persisted to the database), and an attempt to save it has been made
     Given I execute:
     """
-    ReadonlySiteToggle.config do |config|
+    RailsReadonlyInjector.config do |config|
       config.read_only = true
       config.controller_rescue_action = lambda do |context|
         render :text => 'The site is currently in read-only mode'
       end
     end
 
-    ReadonlySiteToggle.reload!
+    RailsReadonlyInjector.reload!
     """
     When I'm using a web browser and attempt to create a user
     Then the user should not be saved
