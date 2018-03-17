@@ -21,25 +21,26 @@ Or install it yourself as:
 
 ## Usage
 
-To switch a complete site into read-only mode, simply set `RailsReadonlyInjector.config.read_only` to `true`, assign a Proc/lambda expression to `RailsReadonlyInjector.config.controller_rescue_action` and call `RailsReadonlyInjector.reload!`. 
-
-To make things a little neater, you can pass a block to the `config` method, like this:
+In order to switch a complete site into read-only mode, you will first need to set the action to occur when an attempt to commit changes to the database is made, from within a controller. Usually, this won't need to change once the application has booted, so I recommend defining it within an initializer, as follows:
 
 ```
+# config/initializers/rails_readonly_injector.rb
 RailsReadonlyInjector.config do |config|
-  config.read_only = false # Whether to set the site to read-only
   config.controller_rescue_action = lambda do |context|
-    # This will be executed once an (unrescued) ActiveRecord::ReadOnlyRecord error is raised,
-    # anywhere within a controller's action.
-    # You can perform any redirection, logging etc from here. 
+    # Define actions to be performed if changes to a read-only model are attempted to be committed to the database.
+    # This lambda expression is evaluated from within the instance of the referring controller.
 
-    # This lambda expression is evaluated from within the context of the controller that raised the error.
+    # You may want to set a redirect, or flash an error message, or something, here.
+    # e.g.
+    # flash[:danger] = 'The site is currently in read-only mode'
+    # redirect_to readonly_page_url
   end
 end
-
-RailsReadonlyInjector.reload!
 ```
 
+When you want to switch a site into read-only mode, you can then simply set `RailsReadonlyInjector.read_only` to true and then call `RailsReadonlyInjector.reload!` to (re-)load the configuration. Alternatively, you can also set `read_only` from within the configuration block inside the initializer.
+
+If you want to reset the configuration to the defaults, you can simply call `RailsReadonlyInjector.reset_configuration!` from anywhere in your application.
 
 ## Development
 
