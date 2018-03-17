@@ -1,5 +1,7 @@
 # Rails ReadOnly Injector
-[![Build Status](https://travis-ci.org/xtrasimplicity/rails_readonly_injector.svg?branch=master)](https://travis-ci.org/xtrasimplicity/rails_readonly_injector)[![Maintainability](https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/maintainability)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/maintainability)<a href="https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/test_coverage"><img src="https://api.codeclimate.com/v1/badges/151a348c5e63129e8dd4/test_coverage" /></a>
+[![Build Status](https://travis-ci.org/xtrasimplicity/rails_readonly_injector.svg?branch=master)](https://travis-ci.org/xtrasimplicity/rails_readonly_injector)
+[![Maintainability](https://api.codeclimate.com/v1/badges/427c153efd48ae03f688/maintainability)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/427c153efd48ae03f688/test_coverage)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/test_coverage)
 
 Easily switch a Rails site into 'read-only' mode, and back again, without restarting the server.
 
