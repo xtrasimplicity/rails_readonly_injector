@@ -6,7 +6,11 @@ Feature: User Controller - When in read only mode
     RailsReadonlyInjector.config do |config|
       config.read_only = true
       config.controller_rescue_action = lambda do |context|
-        render :plain => 'The site is currently in read-only mode'
+        if Rails::VERSION::STRING < '4.1.0'
+          render :text => 'The site is currently in read-only mode'
+        else
+          render :plain => 'The site is currently in read-only mode'
+        end
       end
     end
 
@@ -23,7 +27,11 @@ Feature: User Controller - When in read only mode
     RailsReadonlyInjector.config do |config|
       config.read_only = true
       config.controller_rescue_action = lambda do |context|
-        render :plain => 'The site is currently in read-only mode'
+        if Rails::VERSION::STRING < '4.1.0'
+          render :text => 'The site is currently in read-only mode'
+        else
+          render :plain => 'The site is currently in read-only mode'
+        end
       end
     end
 
