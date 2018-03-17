@@ -48,7 +48,7 @@ If you want to reset the configuration to the defaults, you can simply call `Rai
 ## Configuration Options
 - `read_only` => Whether the site should be in read-only mode. (Default: false)
 - `exclude_classes` => An array of classes that should be exempt from read-only mode.
-
+- `controller_rescue_action` => A lambda expression/Proc to execute when an `ActiveRecord::ReadOnlyRecord` error is raised, from within a controller.
 ## Development
 
 After checking out the repo, run `bundle install` to install the dependencies.
