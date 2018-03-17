@@ -12,6 +12,7 @@ appraise 'rails_4_0' do
   gem 'rspec-rails', '~> 3.7.2', group: :test
   gem 'database_cleaner', '~> 1.0.1'
   gem 'sqlite3', '~> 1.3.13'
+  gem 'xpath', '~> 2.1.0'
 end
 
 appraise 'rails_4_1' do
