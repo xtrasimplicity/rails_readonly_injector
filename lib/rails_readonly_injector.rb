@@ -5,7 +5,12 @@ module RailsReadonlyInjector
   def self.reload!
 
     Rails.application.eager_load!
-    descendants = ActiveRecord::Base.descendants
+
+    if Rails::VERSION::STRING < '5.0.0'
+      descendants = ActiveRecord::Base.descendants
+    else
+      descendants = ApplicationRecord.descendants
+    end
 
     descendants.each do |descendant_class|
     
