@@ -28,6 +28,8 @@ module RailsReadonlyInjector
 
   def self.reset_configuration!
     @config = Configuration.new
+
+    self.reload!
   end
 
   private
