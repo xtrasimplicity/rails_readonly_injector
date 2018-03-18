@@ -1,6 +1,6 @@
 module RailsReadonlyInjector
   class Configuration
-    attr_writer :read_only, :classes_to_exclude
+    attr_writer :read_only, :classes_to_exclude, :classes_to_include
 
     def read_only
       @read_only || false
@@ -18,6 +18,18 @@ module RailsReadonlyInjector
 
     def classes_to_exclude
       @classes_to_exclude || []
+    end
+
+    def classes_to_include
+      return @classes_to_include if defined? @classes_to_include
+
+      Rails.application.eager_load!
+      
+      if Rails::VERSION::STRING < '5.0.0'
+        ActiveRecord::Base.descendants
+      else
+        ApplicationRecord.descendants
+      end
     end
   end
   private_constant :Configuration

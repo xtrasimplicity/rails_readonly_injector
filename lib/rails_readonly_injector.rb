@@ -3,27 +3,18 @@ require "rails_readonly_injector/configuration"
 
 module RailsReadonlyInjector
   def self.reload!
-
-    Rails.application.eager_load!
-
-    if Rails::VERSION::STRING < '5.0.0'
-      descendants = ActiveRecord::Base.descendants
-    else
-      descendants = ApplicationRecord.descendants
-    end
-
-    descendants.each do |descendant_class|
+    config.classes_to_include.each do |klass|
     
-      # Ensure excluded classes aren't set to read-only
-      if config.classes_to_exclude.include? descendant_class
-        restore_readonly_method(descendant_class)
+      # Ensure we don't impact classes that we want to exclude
+      if config.classes_to_exclude.include? klass
+        restore_readonly_method(klass)
         next
       end
 
       if self.config.read_only
-        override_readonly_method(descendant_class)
+        override_readonly_method(klass)
       else
-        restore_readonly_method(descendant_class)
+        restore_readonly_method(klass)
       end
     end
 

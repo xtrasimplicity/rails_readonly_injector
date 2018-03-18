@@ -28,4 +28,39 @@ RSpec.describe RailsReadonlyInjector.config do
       end
     end
   end
+
+  describe '#classes_to_include' do
+    context 'when not defined' do
+      context 'when using Rails < 5.0' do
+        before { stub_const('Rails::VERSION::STRING', '4.1.0') }
+
+        it 'returns the descendants of ActiveRecord::Base' do
+          expect(ActiveRecord::Base).to receive(:descendants)
+
+          RailsReadonlyInjector.config.classes_to_include
+        end
+
+      end
+
+      context 'when using Rails >= 5.0' do
+        before do
+          stub_const('Rails::VERSION::STRING', '5.0.0')
+          
+          unless defined? ApplicationRecord
+            class ApplicationRecord
+              def descendants
+              end
+            end
+          end
+        end
+
+        it 'returns the descendants of ActiveRecord::Base' do
+          expect(ApplicationRecord).to receive(:descendants)
+
+          RailsReadonlyInjector.config.classes_to_include
+        end
+
+      end
+    end
+  end
 end
