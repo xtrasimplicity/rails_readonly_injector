@@ -31,9 +31,7 @@ namespace :dev do
     append_to_file 'Gemfile', %{gem "rails_readonly_injector", path: "#{GEM_ROOT_PATH}"\n}
 
     # Make sure we don't use the gemfile from Appraisal
-    ENV.delete('BUNDLE_GEMFILE')
-    ENV.delete('BUNDLE_BIN_PATH')
-    ENV.delete('RUBYOPT')
+    unset_appraisal_environment_variables
 
     # Install gems
     system("bundle install")
@@ -70,6 +68,8 @@ namespace :dev do
     # Set up the Cucumber and RSpec tests
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'cucumber_features', '.'), 'features'
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'rspec_specs', '.'), 'spec'
+
+    unset_appraisal_environment_variables
 
     exit_code = system('bundle exec cucumber && bundle exec rspec')
     exit exit_code
@@ -123,5 +123,11 @@ namespace :dev do
     File.open(path_to_file, 'w') do |f|
       f.write content
     end
+  end
+
+  def unset_appraisal_environment_variables
+    ENV.delete('BUNDLE_GEMFILE')
+    ENV.delete('BUNDLE_BIN_PATH')
+    ENV.delete('RUBYOPT')
   end
 end
