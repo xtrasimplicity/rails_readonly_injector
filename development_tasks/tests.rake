@@ -63,15 +63,33 @@ namespace :dev do
 
   desc "Synchronises tests from `cucumber_features` and `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs the tests against the application."
   task :run_tests do
+    Rake::Task['dev:run_features'].invoke
+    Rake::Task['dev:run_specs'].invoke
+  end
+
+  desc "Synchronises features from `cucumber_features` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
+  task :run_features do
     switch_to_rails_app_path
 
-    # Set up the Cucumber and RSpec tests
+    # Synchronise the cucumber features
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'cucumber_features', '.'), 'features'
+
+    unset_appraisal_environment_variables
+
+    exit_code = system('bundle exec cucumber')
+    exit exit_code
+  end
+
+  desc "Synchronises specs from `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
+  task :run_specs do
+    switch_to_rails_app_path
+
+    # Synchronise the cucumber features
     FileUtils.cp_r File.join(GEM_ROOT_PATH, 'rspec_specs', '.'), 'spec'
 
     unset_appraisal_environment_variables
 
-    exit_code = system('bundle exec cucumber && bundle exec rspec')
+    exit_code = system('bundle exec rspec')
     exit exit_code
   end
 
