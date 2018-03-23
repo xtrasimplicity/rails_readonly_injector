@@ -2,10 +2,14 @@ require "rails_readonly_injector/version"
 require "rails_readonly_injector/configuration"
 
 module RailsReadonlyInjector
+
+  # Applies changes defined in the `config` object
+  # and resets `config.dirty?` to false
   def self.reload!
     config.classes_to_include.each do |klass|
     
-      # Ensure we don't impact classes that we want to exclude
+      # Ensure we restore classes that we want to exclude, to their defaults
+      # in case they were previously marked as read-only.
       if config.classes_to_exclude.include? klass
         restore_readonly_method(klass)
         next
@@ -23,6 +27,8 @@ module RailsReadonlyInjector
     self.config.send(:reset_dirty_status!)
   end
 
+  # Returns the currently loaded `config.read_only` value.
+  # @return [Boolean] Whether the currently loaded config is set to read-only.
   def self.in_read_only_mode?
     if self.config.dirty? && self.config.changed_attributes.has_key?(:read_only)
       # Return the previously stored value
@@ -31,6 +37,10 @@ module RailsReadonlyInjector
       self.config.read_only
     end
   end
+
+  # Sets the desired configuration object, if a block is provided,
+  # and then returns the current configuration object.
+  # @return [Configuration] The current configuration object.
   def self.config
     yield self.configuration if block_given?
   
