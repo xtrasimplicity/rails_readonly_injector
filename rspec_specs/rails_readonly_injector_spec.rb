@@ -13,7 +13,7 @@ RSpec.describe RailsReadonlyInjector do
     subject { RailsReadonlyInjector.config }
 
     it 'sets `read_only` to false' do
-      expect(RailsReadonlyInjector.config.read_only).to eq(false)
+      expect(RailsReadonlyInjector.config.send(:read_only)).to eq(false)
     end
   end
 
@@ -89,7 +89,7 @@ RSpec.describe RailsReadonlyInjector do
         before { RailsReadonlyInjector.config.classes_to_exclude = [User] }
 
         it 'returns the current value' do
-          expect(RailsReadonlyInjector.in_read_only_mode?).to eq(RailsReadonlyInjector.config.read_only)
+          expect(RailsReadonlyInjector.in_read_only_mode?).to eq(RailsReadonlyInjector.config.send(:read_only))
         end
       end
     end
