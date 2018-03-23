@@ -23,6 +23,10 @@ module RailsReadonlyInjector
     self.config.send(:reset_dirty_status!)
   end
 
+  def self.in_read_only_mode?
+    self.config.dirty? ? self.config.changed_attributes[:read_only] : self.config.read_only
+  end
+
   private
 
   ALIASED_METHOD_NAME = :old_readonly?

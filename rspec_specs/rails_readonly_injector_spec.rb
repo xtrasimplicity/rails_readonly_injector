@@ -56,4 +56,32 @@ RSpec.describe RailsReadonlyInjector do
       it { is_expected.to eq(false) }
     end
   end
+
+  describe '#in_read_only_mode?' do
+    setup do
+      RailsReadonlyInjector.config.read_only = false
+      RailsReadonlyInjector.reload!
+    end
+
+    context 'when `reload!` is called' do
+      before do
+        RailsReadonlyInjector.config.read_only = true
+        RailsReadonlyInjector.reload!
+      end
+
+      it 'returns the correct value' do
+        expect(RailsReadonlyInjector.in_read_only_mode?).to eq(true)
+      end
+    end
+
+    context 'when `reload!` is not called' do
+      before do
+        RailsReadonlyInjector.config.read_only = true
+      end
+
+      it 'returns the previous value' do
+        expect(RailsReadonlyInjector.in_read_only_mode?).to eq(false)
+      end
+    end
+  end
 end
