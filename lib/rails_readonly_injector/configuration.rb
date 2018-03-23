@@ -1,7 +1,7 @@
 module RailsReadonlyInjector
 
   class Configuration
-    attr_reader :read_only, :controller_rescue_action, :classes_to_include, :classes_to_exclude
+    attr_reader :controller_rescue_action, :classes_to_include, :classes_to_exclude
 
     def initialize
       @read_only = false
@@ -88,6 +88,10 @@ module RailsReadonlyInjector
     # so that `#dirty?` returns false 
     def reset_dirty_status!
      @changed_attributes = Hash.new
+    end
+
+    def read_only
+      @read_only
     end
   end
   private_constant :Configuration

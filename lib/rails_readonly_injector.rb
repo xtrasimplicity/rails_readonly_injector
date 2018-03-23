@@ -15,7 +15,7 @@ module RailsReadonlyInjector
         next
       end
 
-      if self.config.read_only
+      if self.config.send(:read_only)
         override_readonly_method(klass)
       else
         restore_readonly_method(klass)
@@ -34,7 +34,7 @@ module RailsReadonlyInjector
       # Return the previously stored value
       self.config.changed_attributes[:read_only]
     else
-      self.config.read_only
+      self.config.send(:read_only)
     end
   end
 
