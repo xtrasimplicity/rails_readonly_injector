@@ -19,6 +19,12 @@ module RailsReadonlyInjector
     end
 
     inject_error_handler_into_actioncontroller_base
+
+    self.config.send(:reset_dirty_status!)
+  end
+
+  def self.in_read_only_mode?
+    self.config.dirty? ? self.config.changed_attributes[:read_only] : self.config.read_only
   end
 
   private
