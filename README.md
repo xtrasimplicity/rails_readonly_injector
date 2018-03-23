@@ -1,5 +1,6 @@
 # Rails ReadOnly Injector
 [![Build Status](https://travis-ci.org/xtrasimplicity/rails_readonly_injector.svg?branch=master)](https://travis-ci.org/xtrasimplicity/rails_readonly_injector)
+[![Read the Docs](https://img.shields.io/readthedocs/pip.svg)](http://www.rubydoc.info/github/xtrasimplicity/rails_readonly_injector/master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/427c153efd48ae03f688/maintainability)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/427c153efd48ae03f688/test_coverage)](https://codeclimate.com/github/xtrasimplicity/rails_readonly_injector/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/rails_readonly_injector.svg)](https://badge.fury.io/rb/rails_readonly_injector)
@@ -45,11 +46,14 @@ When you want to switch a site into read-only mode, you can then simply set `Rai
 
 If you want to reset the configuration to the defaults, you can simply call `RailsReadonlyInjector.reset_configuration!` from anywhere in your application.
 
+If you want to check whether read-only mode is currently enabled, you can use `RailsReadonlyInjector.in_read_only_mode?`.
+
 ## Configuration Options
 - `read_only` => Whether the site should be in read-only mode. (Default: false)
 - `classes_to_exclude` => An array of classes that should be _exempt_ from read-only mode. (Default: `[]`)
 - `classes_to_include` => An array of classes that should be set to read-only mode. (Defaults to `ActiveRecord::Base.descendants` on Rails 3-4, and `ApplicationRecord.descendants` on Rails 5.0+)
 - `controller_rescue_action` => A lambda expression/Proc to execute when an `ActiveRecord::ReadOnlyRecord` error is raised, from within a controller.
+
 ## Development
 
 After checking out the repo, run `bundle install` to install the dependencies.
@@ -57,6 +61,13 @@ After checking out the repo, run `bundle install` to install the dependencies.
 RSpec specs and Cucumber features are stored in `rspec_specs` and `cucumber_features`, respectively. When `bundle exec rake` is run against an appraisal, the contents of these folders are copied to the necessary folders under the temporary rails application that is generated (by `bundle exec rake`) into `tmp/rails_app`.
 
 To run tests for a specific version of Rails, simply run `bundle exec appraisal {APPRAISAL} bundle exec rake`, where `{APPRAISAL}` is one of the appraisals found under `Appraisals`.
+
+If you don't want to re-build the application each time you run tests, you can execute one of the following rake tasks against an appraisal:
+
+* `dev:run_features` => Synchronises features from `cucumber_features` into the temporary rails application, and runs them against the application.
+* `dev:run_specs` => Synchronises specs from `rspec_specs` into the temporary rails application, and runs them against the application.
+* `dev:run_tests` => Runs both `dev:run_features` and `dev:run_specs`.
+
 
 ## Contributing
 
