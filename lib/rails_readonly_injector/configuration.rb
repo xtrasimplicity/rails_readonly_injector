@@ -1,4 +1,5 @@
 module RailsReadonlyInjector
+
   class Configuration
     attr_reader :read_only, :controller_rescue_action, :classes_to_include, :classes_to_exclude
 
@@ -75,23 +76,15 @@ module RailsReadonlyInjector
   end
   private_constant :Configuration
 
-   # Sets the specified configuration options, if a block is provided
-  # @return [Configuration] the current configuration object.
-  def self.config
-    yield self.configuration if block_given?
+  private
   
-    self.configuration
+  def self.configuration
+    @config ||= Configuration.new
   end
 
   def self.reset_configuration!
     @config = Configuration.new
 
     self.reload!
-  end
-
-  private
-
-  def self.configuration
-    @config ||= Configuration.new
   end
 end
