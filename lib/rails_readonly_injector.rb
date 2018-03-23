@@ -24,7 +24,17 @@ module RailsReadonlyInjector
   end
 
   def self.in_read_only_mode?
-    self.config.dirty? ? self.config.changed_attributes[:read_only] : self.config.read_only
+    if self.config.dirty? && self.config.changed_attributes.has_key?(:read_only)
+      # Return the previously stored value
+      self.config.changed_attributes[:read_only]
+    else
+      self.config.read_only
+    end
+  end
+  def self.config
+    yield self.configuration if block_given?
+  
+    self.configuration
   end
 
   private

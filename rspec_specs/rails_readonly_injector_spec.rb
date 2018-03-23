@@ -75,12 +75,22 @@ RSpec.describe RailsReadonlyInjector do
     end
 
     context 'when `reload!` is not called' do
-      before do
-        RailsReadonlyInjector.config.read_only = true
+      context 'when `config.read_only` is changed' do
+        before do
+          RailsReadonlyInjector.config.read_only = true
+        end
+
+        it 'returns the previous value' do
+          expect(RailsReadonlyInjector.in_read_only_mode?).to eq(false)
+        end
       end
 
-      it 'returns the previous value' do
-        expect(RailsReadonlyInjector.in_read_only_mode?).to eq(false)
+      context 'when `config.read_only` is not changed' do
+        before { RailsReadonlyInjector.config.classes_to_exclude = [User] }
+
+        it 'returns the current value' do
+          expect(RailsReadonlyInjector.in_read_only_mode?).to eq(RailsReadonlyInjector.config.read_only)
+        end
       end
     end
   end
