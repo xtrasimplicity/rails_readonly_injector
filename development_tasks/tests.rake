@@ -62,10 +62,7 @@ namespace :dev do
   end
 
   desc "Synchronises tests from `cucumber_features` and `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs the tests against the application."
-  task :run_tests do
-    Rake::Task['dev:run_features'].invoke
-    Rake::Task['dev:run_specs'].invoke
-  end
+  task :run_tests => [:run_features, :run_specs]
 
   desc "Synchronises features from `cucumber_features` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
   task :run_features do
@@ -76,8 +73,9 @@ namespace :dev do
 
     unset_appraisal_environment_variables
 
-    exit_code = system('bundle exec cucumber')
-    exit exit_code
+    command_executed_successfully = system('bundle exec cucumber')
+    
+    exit 1 unless command_executed_successfully
   end
 
   desc "Synchronises specs from `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
@@ -89,8 +87,10 @@ namespace :dev do
 
     unset_appraisal_environment_variables
 
-    exit_code = system('bundle exec rspec')
-    exit exit_code
+    
+    command_executed_successfully = system('bundle exec rspec')
+    
+    exit 1 unless command_executed_successfully
   end
 
   def parse_gemfile(file_path)
