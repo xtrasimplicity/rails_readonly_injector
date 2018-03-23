@@ -19,6 +19,8 @@ module RailsReadonlyInjector
     end
 
     inject_error_handler_into_actioncontroller_base
+
+    self.config.send(:reset_dirty_status!)
   end
 
   private
