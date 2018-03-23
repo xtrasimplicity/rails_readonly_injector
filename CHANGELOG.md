@@ -1,3 +1,5 @@
+## 1.0.0
+ - Removed the ability to read the current read-only status using `RailsReadonlyInjector.config.read_only`, and replaced it with `RailsReadonlyInjector.in_read_only_mode?`.
 ## 0.3.0
  - Added ability to explicitly include specific classes.
 ## 0.2.0
