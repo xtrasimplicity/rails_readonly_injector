@@ -25,14 +25,16 @@ Or install it yourself as:
 
 ## Usage
 
-In order to switch a complete site into read-only mode, you will first need to set the action to occur when an attempt to commit changes to the database is made, from within a controller. Usually, this won't need to change once the application has booted, so I recommend defining it within an initializer, as follows:
+In order to switch a complete site into read-only mode, you will first need to set the action to occur when an attempt to commit changes to the database is made, from within a controller. This action will be executed from within the context of the referring controller.
+
+Usually, this won't need to change once the application has booted, so I recommend defining it within an initializer, as follows:
 
 ```
 # config/initializers/rails_readonly_injector.rb
 RailsReadonlyInjector.config do |config|
   config.controller_rescue_action = lambda do |context|
     # Define actions to be performed if changes to a read-only model are attempted to be committed to the database.
-    # This lambda expression is evaluated from within the instance of the referring controller.
+    # This lambda expression is evaluated from within the context of the referring controller.
 
     # You may want to set a redirect, or flash an error message, or something, here.
     # e.g.
@@ -42,7 +44,11 @@ RailsReadonlyInjector.config do |config|
 end
 ```
 
-When you want to switch a site into read-only mode, you can then simply set `RailsReadonlyInjector.read_only` to true and then call `RailsReadonlyInjector.reload!` to (re-)load the configuration. Alternatively, you can also set `read_only` from within the configuration block inside the initializer.
+When you want to switch a site into read-only mode, you can then simply
+* set `RailsReadonlyInjector.read_only` to true, and then 
+* call `RailsReadonlyInjector.reload!` to (re-)load the configuration. 
+
+Alternatively, you can also set `read_only` from within the configuration block inside the initializer.
 
 If you want to reset the configuration to the defaults, you can simply call `RailsReadonlyInjector.reset_configuration!` from anywhere in your application.
 
@@ -58,16 +64,15 @@ If you want to check whether read-only mode is currently enabled, you can use `R
 
 After checking out the repo, run `bundle install` to install the dependencies.
 
-RSpec specs and Cucumber features are stored in `rspec_specs` and `cucumber_features`, respectively. When `bundle exec rake` is run against an appraisal, the contents of these folders are copied to the necessary folders under the temporary rails application that is generated (by `bundle exec rake`) into `tmp/rails_app`.
+RSpec specs and Cucumber features are stored in `rspec_specs` and `cucumber_features`, respectively. When `bundle exec rake` is run against an appraisal, the contents of these folders are copied to the necessary folders under the temporary rails application that `bundle exec rake` generates into `tmp/rails_app`.
 
-To run tests for a specific version of Rails, simply run `bundle exec appraisal {APPRAISAL} bundle exec rake`, where `{APPRAISAL}` is one of the appraisals found under `Appraisals`.
+To run tests for a specific version of Rails, simply run `bundle exec appraisal {APPRAISAL} bundle exec rake`, where `{APPRAISAL}` is one of the appraisals found under `Appraisals`. e.g. `bundle exec appraisal rails_4_1 bundle exec rake`
 
-If you don't want to re-build the application each time you run tests, you can execute one of the following rake tasks against an appraisal:
+If you don't want to re-build the temporary application each time you run tests, you can execute the following rake tasks against an appraisal:
 
-* `dev:run_features` => Synchronises features from `cucumber_features` into the temporary rails application, and runs them against the application.
-* `dev:run_specs` => Synchronises specs from `rspec_specs` into the temporary rails application, and runs them against the application.
-* `dev:run_tests` => Runs both `dev:run_features` and `dev:run_specs`.
-
+* `dev:run_features` => Synchronises features from `cucumber_features` into the temporary rails application, and runs cucumber against the temporary application.
+* `dev:run_specs` => Synchronises specs from `rspec_specs` into the temporary rails application, and runs rspec against the temporary application.
+* `dev:run_tests` => Runs both `dev:run_features` and `dev:run_specs`, and ret on failure.
 
 ## Contributing
 
