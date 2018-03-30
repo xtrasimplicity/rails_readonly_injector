@@ -45,7 +45,7 @@ end
 ```
 
 When you want to switch a site into read-only mode, you can then simply
-* set `RailsReadonlyInjector.read_only` to true, and then 
+* set `RailsReadOnlyInjector.config.read_only` to true, and then 
 * call `RailsReadonlyInjector.reload!` to (re-)load the configuration. 
 
 Alternatively, you can also set `read_only` from within the configuration block inside the initializer.
@@ -55,6 +55,8 @@ If you want to reset the configuration to the defaults, you can simply call `Rai
 If you want to check whether read-only mode is currently enabled, you can use `RailsReadonlyInjector.in_read_only_mode?`.
 
 ## Configuration Options
+The following configuration options can be set through `RailsReadonlyInjector.config`:
+
 - `read_only` => Whether the site should be in read-only mode. (Default: false)
 - `classes_to_exclude` => An array of classes that should be _exempt_ from read-only mode. (Default: `[]`)
 - `classes_to_include` => An array of classes that should be set to read-only mode. (Defaults to `ActiveRecord::Base.descendants` on Rails 3-4, and `ApplicationRecord.descendants` on Rails 5.0+)
