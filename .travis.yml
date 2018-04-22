@@ -14,7 +14,8 @@ branches:
     - master
 
 before_install:
-  - gem unpack cucumber-rails-1.6.0.pre.gem --target tmp/vendor/gems
+  - echo $BUNDLE_GEMFILE
+
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
