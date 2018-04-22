@@ -14,8 +14,10 @@ branches:
     - master
 
 before_install:
-  - echo $BUNDLE_GEMFILE
-
+  - [[ $BUNDLE_GEMFILE = *"rails_5_2"* ]] && {
+      echo "Installing Cucumber-rails v1.6.0.pre...";
+      gem install cucumber-rails-1.6.0.pre.gem;
+    } || echo "Rails version is < 5.2. Not installing Cucumber 1.6.0.pre!"
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
