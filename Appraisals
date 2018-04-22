@@ -44,3 +44,10 @@ appraise 'rails_5_1' do
   gem 'rspec-rails', '~> 3.7.2', group: :test
   gem 'database_cleaner', '~> 1.0.1'
 end
+
+appraise 'rails_5_2' do
+  gem 'rails', '~> 5.2.0'
+  gem 'cucumber-rails', '~> 1.6.0.pre', group: :test, require: false, path: 'vendor/gems'
+  gem 'rspec-rails', '~> 3.7.2', group: :test
+  gem 'database_cleaner', '~> 1.0.1'
+end
