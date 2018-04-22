@@ -14,10 +14,7 @@ branches:
     - master
 
 before_install:
-  - [[ $BUNDLE_GEMFILE = *"rails_5_2"* ]] && {
-      echo "Installing Cucumber-rails v1.6.0.pre...";
-      gem install cucumber-rails-1.6.0.pre.gem;
-    }
+  - /bin/bash -c '[[ $BUNDLE_GEMFILE = *"rails_5_2"* ]] && { echo "Installing Cucumber-rails v1.6.0.pre..."; gem install cucumber-rails-1.6.0.pre.gem; }'
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
