@@ -25,12 +25,12 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 gemfile:
-  - gemfiles/rails_3.gemfile
-  - gemfiles/rails_4_0.gemfile
-  - gemfiles/rails_4_1.gemfile
-  - gemfiles/rails_4_2.gemfile
-  - gemfiles/rails_5_0.gemfile
-  - gemfiles/rails_5_1.gemfile
+#  - gemfiles/rails_3.gemfile
+#  - gemfiles/rails_4_0.gemfile
+#  - gemfiles/rails_4_1.gemfile
+#  - gemfiles/rails_4_2.gemfile
+#  - gemfiles/rails_5_0.gemfile
+#  - gemfiles/rails_5_1.gemfile
   - gemfiles/rails_5_2.gemfile
 
 matrix:
