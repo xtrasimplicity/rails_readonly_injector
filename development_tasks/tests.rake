@@ -1,8 +1,12 @@
-require 'fileutils'
+require_relative 'support/file_helpers'
+require_relative 'support/gem_helpers'
 
 namespace :dev do
   RAILS_APP_PATH = File.expand_path('../../tmp/rails_app', __FILE__).freeze
   GEM_ROOT_PATH = File.expand_path('../..', __FILE__).freeze
+
+  include GemHelpers
+  include FileHelpers
 
   desc "Deploys a test rails application into the #{RAILS_APP_PATH} directory."
   task :deploy_test_app do
@@ -20,15 +24,11 @@ namespace :dev do
     # Read gems defined in this Appraisal,
     # so we can write them to the Gemfile rails generated.
     # i.e. To 'override'/force a specific version.
-    gems_defined_in_appraisal = parse_gemfile(ENV['BUNDLE_GEMFILE'])
-    gems_defined_in_gemfile = parse_gemfile('Gemfile').collect { |l| l.gem_name }
-
-    gems_to_override = gems_defined_in_appraisal.reject { |l| gems_defined_in_gemfile.include? l.gem_name }.collect { |gem| gem.original_line_in_gemfile }
+    ensure_gem_versions_defined_in_appraisal_are_used
 
     # Add required gems to the gemfile
-    append_to_file 'Gemfile', gems_to_override.join("\n")
-    append_to_file 'Gemfile', %{gem 'simplecov', require: false, group: :test\n}
-    append_to_file 'Gemfile', %{gem "rails_readonly_injector", path: "#{GEM_ROOT_PATH}"\n}
+    add_gem 'simplecov', require: false, group: :test
+    add_gem 'rails_readonly_injector', path: GEM_ROOT_PATH
 
     # Make sure we don't use the gemfile from Appraisal
     unset_appraisal_environment_variables
@@ -93,24 +93,6 @@ namespace :dev do
     exit 1 unless command_executed_successfully
   end
 
-  def parse_gemfile(file_path)
-    gems = []
-
-    File.open(file_path).readlines.each do |line|
-      matches = line.match /^\s*gem\s+['|"]/
-
-      next if matches.nil?
-
-      parts = line.split(',')
-      
-      gem_name = parts.first.gsub(/\s*gem\s*|["|']|\n/, '')
-
-      gems << OpenStruct.new({ gem_name: gem_name, original_line_in_gemfile: line })
-    end
-
-    gems
-  end
-
   def switch_to_gems_root_path
     FileUtils.cd GEM_ROOT_PATH
   end
@@ -119,33 +101,11 @@ namespace :dev do
     FileUtils.cd RAILS_APP_PATH
   end
 
-  def append_to_file(path_to_file, content)
-    raise 'The specified path is not a file!' unless File.file? path_to_file
-
-    File.open(path_to_file, 'a') do |f|
-      f.write content
-    end
-  end
-
-  def append_to_beginning_of_file(path_to_file, content)
-    raise 'The specified path is not a file!' unless File.file? path_to_file
-
-    existing_content_as_array = File.open(path_to_file, 'r').readlines
-
-    new_content_arr = [content] + existing_content_as_array
-
-    write_file_with_content path_to_file, new_content_arr.join("\n")
-  end
-
-  def write_file_with_content(path_to_file, content)
-    File.open(path_to_file, 'w') do |f|
-      f.write content
-    end
-  end
-
   def unset_appraisal_environment_variables
     ENV.delete('BUNDLE_GEMFILE')
     ENV.delete('BUNDLE_BIN_PATH')
     ENV.delete('RUBYOPT')
   end
+
+
 end
