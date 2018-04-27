@@ -1,0 +1,7 @@
+AllCops:
+  Exclude:
+    - tmp/**/*
+    
+Metrics/BlockLength:
+  Exclude:
+    - rspec_specs/**/*

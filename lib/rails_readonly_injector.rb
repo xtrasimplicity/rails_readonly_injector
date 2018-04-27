@@ -1,13 +1,13 @@
-require "rails_readonly_injector/version"
-require "rails_readonly_injector/configuration"
+# frozen_string_literal: true
+
+require 'rails_readonly_injector/version'
+require 'rails_readonly_injector/configuration'
 
 module RailsReadonlyInjector
-
   # Applies changes defined in the `config` object
   # and resets `config.dirty?` to false
   def self.reload!
     config.classes_to_include.each do |klass|
-    
       # Ensure we restore classes that we want to exclude, to their defaults
       # in case they were previously marked as read-only.
       if config.classes_to_exclude.include? klass
@@ -15,7 +15,7 @@ module RailsReadonlyInjector
         next
       end
 
-      if self.config.send(:read_only)
+      if config.send(:read_only)
         override_readonly_method(klass)
       else
         restore_readonly_method(klass)
@@ -24,17 +24,17 @@ module RailsReadonlyInjector
 
     inject_error_handler_into_actioncontroller_base
 
-    self.config.send(:reset_dirty_status!)
+    config.send(:reset_dirty_status!)
   end
 
   # Returns the currently loaded `config.read_only` value.
   # @return [Boolean] Whether the currently loaded config is set to read-only.
   def self.in_read_only_mode?
-    if self.config.dirty? && self.config.changed_attributes.has_key?(:read_only)
+    if config.dirty? && config.changed_attributes.key?(:read_only)
       # Return the previously stored value
-      self.config.changed_attributes[:read_only]
+      config.changed_attributes[:read_only]
     else
-      self.config.send(:read_only)
+      config.send(:read_only)
     end
   end
 
@@ -42,9 +42,9 @@ module RailsReadonlyInjector
   # and then returns the current configuration object.
   # @return [Configuration] The current configuration object.
   def self.config
-    yield self.configuration if block_given?
-  
-    self.configuration
+    yield configuration if block_given?
+
+    configuration
   end
 
   private
@@ -70,7 +70,7 @@ module RailsReadonlyInjector
   end
 
   def self.inject_error_handler_into_actioncontroller_base
-    ActionController::Base.class_eval do |klass|
+    ActionController::Base.class_eval do
       rescue_from ActiveRecord::ReadOnlyRecord, with: :rescue_from_readonly_failure
 
       protected

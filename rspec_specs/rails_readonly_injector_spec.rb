@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RailsReadonlyInjector do
@@ -87,9 +89,10 @@ RSpec.describe RailsReadonlyInjector do
 
       context 'when `config.read_only` is not changed' do
         before { RailsReadonlyInjector.config.classes_to_exclude = [User] }
+        subject { RailsReadonlyInjector.in_read_only_mode? }
 
         it 'returns the current value' do
-          expect(RailsReadonlyInjector.in_read_only_mode?).to eq(RailsReadonlyInjector.config.send(:read_only))
+          expect(subject).to eq(RailsReadonlyInjector.config.send(:read_only))
         end
       end
     end

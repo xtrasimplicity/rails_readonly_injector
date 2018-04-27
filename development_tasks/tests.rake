@@ -1,34 +1,26 @@
-require 'fileutils'
+# frozen_string_literal: true
+
+require_relative 'support/file_helpers'
+require_relative 'support/gem_helpers'
 
 namespace :dev do
-  RAILS_APP_PATH = File.expand_path('../../tmp/rails_app', __FILE__).freeze
-  GEM_ROOT_PATH = File.expand_path('../..', __FILE__).freeze
+  include GemHelpers
+  include FileHelpers
 
-  desc "Deploys a test rails application into the #{RAILS_APP_PATH} directory."
+  desc 'Deploys a test rails application.'
   task :deploy_test_app do
     switch_to_gems_root_path
 
-    # Remove the app, if it exists already
-    system("rm -rf #{RAILS_APP_PATH}")
-
-    puts "Creating a new rails application..."
-    FileUtils.mkdir_p RAILS_APP_PATH
-    system("bundle exec rails new #{RAILS_APP_PATH}")
+    puts 'Creating a new rails application...'
+    generate_rails_application
 
     switch_to_rails_app_path
 
-    # Read gems defined in this Appraisal,
-    # so we can write them to the Gemfile rails generated.
-    # i.e. To 'override'/force a specific version.
-    gems_defined_in_appraisal = parse_gemfile(ENV['BUNDLE_GEMFILE'])
-    gems_defined_in_gemfile = parse_gemfile('Gemfile').collect { |l| l.gem_name }
-
-    gems_to_override = gems_defined_in_appraisal.reject { |l| gems_defined_in_gemfile.include? l.gem_name }.collect { |gem| gem.original_line_in_gemfile }
+    ensure_gem_versions_defined_in_appraisal_are_used
 
     # Add required gems to the gemfile
-    append_to_file 'Gemfile', gems_to_override.join("\n")
-    append_to_file 'Gemfile', %{gem 'simplecov', require: false, group: :test\n}
-    append_to_file 'Gemfile', %{gem "rails_readonly_injector", path: "#{GEM_ROOT_PATH}"\n}
+    add_gem 'simplecov', require: false, group: :test
+    add_gem 'rails_readonly_injector', path: gems_root_path
 
     # Make sure we don't use the gemfile from Appraisal
     unset_appraisal_environment_variables
@@ -36,40 +28,30 @@ namespace :dev do
     # Install gems
     system("bundle install")
 
-    system("bundle exec rails generate cucumber:install")
-    system("bundle exec rails generate rspec:install")
+    puts 'Executing Generators...'
+    system('bundle exec rails generate cucumber:install')
+    system('bundle exec rails generate rspec:install')
 
     # RSpec: Include all files in support/
     append_to_file 'spec/spec_helper.rb', "Dir.glob('support/**/*.rb').each { |rb| require rb }"
 
-    # Set up SimpleCov
-    append_to_beginning_of_file 'spec/spec_helper.rb', %{
-      require 'simplecov'
-      require 'rails_readonly_injector'
-    }
-    append_to_beginning_of_file 'features/support/env.rb', "require 'simplecov'"
+    install_simplecov("#{gems_root_path}/coverage")
     
-    write_file_with_content '.simplecov', %{
-      SimpleCov.start do
-        coverage_dir '#{GEM_ROOT_PATH}/coverage'
-      end
-    }
-
     # Prepare database migrations, etc
-    system("bundle exec rails generate scaffold User name:string")
+    system('bundle exec rails generate scaffold User name:string')
     
-    system("RAILS_ENV=test bundle exec rake db:migrate")
+    system('RAILS_ENV=test bundle exec rake db:migrate')
   end
 
-  desc "Synchronises tests from `cucumber_features` and `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs the tests against the application."
-  task :run_tests => [:run_features, :run_specs]
+  desc 'Synchronises tests from `cucumber_features` and `rspec_specs` into the temporary rails app, and runs them.'
+  task run_tests: %i[run_features run_specs]
 
-  desc "Synchronises features from `cucumber_features` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
+  desc 'Synchronises features from `cucumber_features` into the temporary rails app, and runs them.'
   task :run_features do
     switch_to_rails_app_path
 
     # Synchronise the cucumber features
-    FileUtils.cp_r File.join(GEM_ROOT_PATH, 'cucumber_features', '.'), 'features'
+    FileUtils.cp_r File.join(gems_root_path, 'cucumber_features'), 'features'
 
     unset_appraisal_environment_variables
 
@@ -78,74 +60,18 @@ namespace :dev do
     exit 1 unless command_executed_successfully
   end
 
-  desc "Synchronises specs from `rspec_specs` into the rails application in #{RAILS_APP_PATH}, and runs them against the application."
+  desc 'Synchronise specs from `rspec_specs` into the temporary rails app, and run rspec.'
   task :run_specs do
     switch_to_rails_app_path
 
-    # Synchronise the cucumber features
-    FileUtils.cp_r File.join(GEM_ROOT_PATH, 'rspec_specs', '.'), 'spec'
+    # Synchronise the RSpec specs
+    FileUtils.cp_r File.join(gems_root_path, 'rspec_specs'), 'spec'
 
     unset_appraisal_environment_variables
 
-    
     command_executed_successfully = system('bundle exec rspec')
     
     exit 1 unless command_executed_successfully
   end
 
-  def parse_gemfile(file_path)
-    gems = []
-
-    File.open(file_path).readlines.each do |line|
-      matches = line.match /^\s*gem\s+['|"]/
-
-      next if matches.nil?
-
-      parts = line.split(',')
-      
-      gem_name = parts.first.gsub(/\s*gem\s*|["|']|\n/, '')
-
-      gems << OpenStruct.new({ gem_name: gem_name, original_line_in_gemfile: line })
-    end
-
-    gems
-  end
-
-  def switch_to_gems_root_path
-    FileUtils.cd GEM_ROOT_PATH
-  end
-
-  def switch_to_rails_app_path
-    FileUtils.cd RAILS_APP_PATH
-  end
-
-  def append_to_file(path_to_file, content)
-    raise 'The specified path is not a file!' unless File.file? path_to_file
-
-    File.open(path_to_file, 'a') do |f|
-      f.write content
-    end
-  end
-
-  def append_to_beginning_of_file(path_to_file, content)
-    raise 'The specified path is not a file!' unless File.file? path_to_file
-
-    existing_content_as_array = File.open(path_to_file, 'r').readlines
-
-    new_content_arr = [content] + existing_content_as_array
-
-    write_file_with_content path_to_file, new_content_arr.join("\n")
-  end
-
-  def write_file_with_content(path_to_file, content)
-    File.open(path_to_file, 'w') do |f|
-      f.write content
-    end
-  end
-
-  def unset_appraisal_environment_variables
-    ENV.delete('BUNDLE_GEMFILE')
-    ENV.delete('BUNDLE_BIN_PATH')
-    ENV.delete('RUBYOPT')
-  end
 end
