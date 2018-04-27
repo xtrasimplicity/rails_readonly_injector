@@ -9,6 +9,8 @@ module GemHelpers
     append_to_file('Gemfile', "#{line}\n")
   end
 
+
+  # 'Override'/force a specific gem version, as defined in the Appraisal.
   def ensure_gem_versions_defined_in_appraisal_are_used
     gems_defined_in_appraisal = retrieve_gems_from_gemfile(ENV['BUNDLE_GEMFILE'])
     gems_defined_in_gemfile = retrieve_gems_from_gemfile('Gemfile').collect { |l| l.gem_name }
@@ -18,6 +20,25 @@ module GemHelpers
     end
   end
 
+  def install_simplecov(coverage_dir)
+    append_to_beginning_of_file 'spec/spec_helper.rb', %{
+      require 'simplecov'
+      require 'rails_readonly_injector'
+    }
+    append_to_beginning_of_file 'features/support/env.rb', "require 'simplecov'"
+    
+    write_file_with_content '.simplecov', %{
+      SimpleCov.start do
+        coverage_dir '#{coverage_dir}'
+      end
+    }
+  end
+
+  def unset_appraisal_environment_variables
+    ENV.delete('BUNDLE_GEMFILE')
+    ENV.delete('BUNDLE_BIN_PATH')
+    ENV.delete('RUBYOPT')
+  end
 
   private
 
