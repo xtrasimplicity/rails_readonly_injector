@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 appraise 'rails_3' do
   gem 'rails', '~> 3'
   gem 'cucumber-rails', '~> 1.4.5'

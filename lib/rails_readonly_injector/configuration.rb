@@ -1,14 +1,15 @@
-module RailsReadonlyInjector
+# frozen_string_literal: true
 
+module RailsReadonlyInjector
   class Configuration
     attr_reader :controller_rescue_action, :classes_to_include, :classes_to_exclude
 
     def initialize
       @read_only = false
-      @controller_rescue_action = Proc.new {}
+      @controller_rescue_action = proc {}
       @classes_to_exclude = []
 
-      @changed_attributes = Hash.new
+      @changed_attributes = {}
     end
 
     # @return [Array<Class>] An array of classes to include
@@ -19,7 +20,7 @@ module RailsReadonlyInjector
       return @classes_to_include if defined? @classes_to_include
 
       Rails.application.eager_load!
-      
+
       if Rails::VERSION::STRING < '5.0.0'
         ActiveRecord::Base.descendants
       else
@@ -36,7 +37,7 @@ module RailsReadonlyInjector
       update_instance_variable('@read_only', new_value)
     end
 
-    # @param action [Lambda, Proc] The action to execute when rescuing from 
+    # @param action [Lambda, Proc] The action to execute when rescuing from
     #   `ActiveRecord::RecordReadOnly` errors, within a controller
     def controller_rescue_action=(action)
       raise 'A lambda or proc must be specified' unless action.respond_to? :call
@@ -58,7 +59,7 @@ module RailsReadonlyInjector
     # Instance methods  #
     #####################
 
-    # @return [Boolean] Whether the configuration 
+    # @return [Boolean] Whether the configuration
     #   has changed since the config was last reloaded
     def dirty?
       !changed_attributes.empty?
@@ -66,9 +67,7 @@ module RailsReadonlyInjector
 
     # @return [Hash] A hash of changed attributes
     #   and their previous values
-    def changed_attributes
-      @changed_attributes
-    end
+    attr_reader :changed_attributes
 
     private
 
@@ -80,19 +79,17 @@ module RailsReadonlyInjector
       instance_variable_set(variable_name.to_sym, new_value)
 
       unless old_value == new_value
-        changed_attributes[variable_name.to_s.gsub('@', '').to_sym] = old_value
+        changed_attributes[variable_name.to_s.delete('@').to_sym] = old_value
       end
     end
 
     # Resets the changed attributes hash,
-    # so that `#dirty?` returns false 
+    # so that `#dirty?` returns false
     def reset_dirty_status!
-     @changed_attributes = Hash.new
+      @changed_attributes = {}
     end
 
-    def read_only
-      @read_only
-    end
+    attr_reader :read_only
   end
   private_constant :Configuration
 
@@ -108,6 +105,6 @@ module RailsReadonlyInjector
   def self.reset_configuration!
     @config = Configuration.new
 
-    self.reload!
+    reload!
   end
 end

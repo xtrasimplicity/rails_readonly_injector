@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
+# :nodoc:
 module FileHelpers
   GEM_ROOT_PATH = File.expand_path('../../..', __FILE__).freeze
   RAILS_APP_PATH = File.expand_path(File.join(GEM_ROOT_PATH, 'tmp', 'rails_app')).freeze
